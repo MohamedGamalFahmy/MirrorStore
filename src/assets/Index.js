@@ -72,11 +72,3 @@ export const mirrorbs = [
 
 
 ];
-// const mirrorre = [
-//   {},
-
-// ];
-// const mirrorsh = [
-//   {},
-
-// ];

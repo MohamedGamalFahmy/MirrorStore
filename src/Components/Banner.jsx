@@ -1,5 +1,5 @@
 import React from 'react'
-import { mr1, b11, b17, mr2, mirrorbs } from '../assets';
+import { mr1, b11, b17, mr2, mirrorbs } from '../assets/index';
 import { useRef, useState } from 'react';
 import { motion } from "framer-motion";
 // Import Swiper React components

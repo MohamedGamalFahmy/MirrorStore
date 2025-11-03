@@ -1,5 +1,5 @@
 import React from 'react'
-import { mirrorbs } from '../assets'
+import { mirrorbs } from '../assets/index'
 import { motion } from 'framer-motion'
 const MirrorCard = () => {
     return (
