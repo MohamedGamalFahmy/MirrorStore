@@ -1,5 +1,5 @@
 import React from 'react'
-import { mr1, b11, b17, mr2, mirrorbs } from '../assets/index';
+import {mirrorbs } from '../assets';
 import { useRef, useState } from 'react';
 import { motion } from "framer-motion";
 // Import Swiper React components
@@ -13,6 +13,7 @@ import '../App.css';
 import './Banner.css';
 // import required modules
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
+console.log("mirrorbs length:", mirrorbs?.length);
 
 const Banner = () => {
   return (
@@ -38,10 +39,14 @@ const Banner = () => {
         modules={[EffectCoverflow, Autoplay]}
         className=" mySwiper absolute top-0 left-0 w-full h-full object-cover brightness-90"
       >
+        
         {mirrorbs.map((mirror) => (
 
+
           <SwiperSlide>
+            
             <img src={mirror.imge} />
+            
           </SwiperSlide>
         ))}
 
