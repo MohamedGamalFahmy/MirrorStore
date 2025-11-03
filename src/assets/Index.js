@@ -65,8 +65,8 @@ export const mirrorbs = [
   { id: 19, name: 'mb19', imge: b19 },
   { id: 20, name: 'mb20', imge: b20 },
   { id: 30, name: 'mb30', imge: b30 },
-    { id: 35, name: 'mb31', imge: b31 },
+  { id: 35, name: 'mb31', imge: b31 },
   { id: 31, name: 'mb32', imge: b32 },
   { id: 33, name: 'mb34', imge: b34 },
-  { id: 34, name: 'mb35', imge: b35 }                
+  { id: 34, name: 'mb35', imge: b35 }
 ];

@@ -14,8 +14,9 @@ import './styles.css';
 
 // import required modules
 import { EffectCards } from 'swiper/modules';
-import { b24, b32, b17 } from '../assets/index';
+import { b24, b32, b17 } from '../assets';
 import { Link } from 'react-router-dom';
+
 
 
 const Products = () => {
