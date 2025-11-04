@@ -12,7 +12,7 @@ import MirrorCard from './Products/MirrorCard'
 
 const Layout = () => {
   return (
-    <div className='bg-gradient-to-br from-[#1a1a1a] via-[#0f0f0f] to-[#1a1a1a] opacity-95bg-1.jpg)]'>
+    <div className='bg-gradient-to-br from-[#1a1a1a] via-[#0f0f0f] to-[#1a1a1a]  mt-10'>
       <Navbar />
       <Outlet />
       <Footer />

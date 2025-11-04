@@ -1,3 +1,4 @@
+import bgcard from './bgcard.jpg'
 import mr2 from './s1.jpg';
 import mr1 from './r11.jpg';
 import b1 from './b1.jpg';
@@ -39,7 +40,7 @@ import b35 from './b35.png';
 export {
   mr2,
   mr1, b1, b2, b10, b11, b12, b13, b14, b15, b16, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28,
-  b29, b3, b30, b31, b32, b34, b35, b4, b5, b6, b7, b8, b9, b17,
+  b29, b3, b30, b31, b32, b34, b35, b4, b5, b6, b7, b8, b9, b17,bgcard,
 
 };
 

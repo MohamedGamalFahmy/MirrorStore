@@ -13,11 +13,10 @@ import '../App.css';
 import './Banner.css';
 // import required modules
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
-console.log("mirrorbs length:", mirrorbs?.length);
 
 const Banner = () => {
   return (
-    <section className="relative w-full h-screen overflow-hidden mt-10">
+    <section className="relative w-full h-screen overflow-hidden">
 
 
       <Swiper

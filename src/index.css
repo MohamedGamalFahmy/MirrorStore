@@ -12,3 +12,9 @@ h1{
     padding-top: 10px;
     font-size: xx-large;   
 }
+.perspective {
+  perspective: 1000px;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
