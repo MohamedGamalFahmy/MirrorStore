@@ -8,9 +8,10 @@ const Navbar = () => {
   const navLinks = [
     { id: 1, name: "Home", path: "/" },
     { id: 2, name: "Mirrors", path: "/MirrorReception" },
-    { id: 3, name: "Showers", path: "/ShowersCard" },
+    { id: 3, name: "ShowersCard", path: "/ShowersCard" },
     { id: 5, name: "MirrorBathRoom", path: "/MirrorCard" },
-    { id: 4, name: "Contact", path: "/contact" },
+    { id: 4, name: "Contact", path: "/Contactme" },
+
   ];
 
   return (

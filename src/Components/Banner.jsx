@@ -16,7 +16,7 @@ import { EffectCoverflow, Autoplay } from 'swiper/modules';
 
 const Banner = () => {
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden mt-10">
 
 
       <Swiper

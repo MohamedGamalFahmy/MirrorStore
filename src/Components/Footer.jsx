@@ -1,11 +1,12 @@
 import React from 'react'
+import Contactme from './Contactme'
 
 const Footer = () => {
-  return (
+  return (  
     <div>
-      Footer
+      sdfevfkljhg
     </div>
-  )
+      )
 }
 
-export default Footer
+      export default Footer
