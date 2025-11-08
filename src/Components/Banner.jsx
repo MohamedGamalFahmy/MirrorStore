@@ -1,5 +1,5 @@
 import React from 'react'
-import {mirrorbs } from '../assets';
+import { b24, b32, b17, s1, s2, s3, r1, r2, r14 } from '../assets';
 import { useRef, useState } from 'react';
 import { motion } from "framer-motion";
 // Import Swiper React components
@@ -38,16 +38,20 @@ const Banner = () => {
         modules={[EffectCoverflow, Autoplay]}
         className=" mySwiper absolute top-0 left-0 w-full h-full object-cover brightness-90"
       >
-        
-        {mirrorbs.map((mirror) => (
 
 
-          <SwiperSlide>
-            
-            <img src={mirror.imge} />
-            
-          </SwiperSlide>
-        ))}
+        <SwiperSlide> <img src={r14} /> </SwiperSlide>
+
+        <SwiperSlide> <img src={b24} /> </SwiperSlide>
+        <SwiperSlide> <img src={s1} /> </SwiperSlide>
+        <SwiperSlide> <img src={r1} /> </SwiperSlide>
+        <SwiperSlide> <img src={b32} /> </SwiperSlide>
+        <SwiperSlide> <img src={s2} /> </SwiperSlide>
+        <SwiperSlide> <img src={r2} /> </SwiperSlide>
+        <SwiperSlide> <img src={b17} /> </SwiperSlide>
+        <SwiperSlide> <img src={s3} /> </SwiperSlide>
+        <SwiperSlide> <img src={r14} /> </SwiperSlide>
+   
 
       </Swiper>
       {/* Overlay */}

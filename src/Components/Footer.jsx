@@ -4,7 +4,6 @@ import Contactme from './Contactme'
 const Footer = () => {
   return (  
     <div>
-      sdfevfkljhg
     </div>
       )
 }

@@ -3,7 +3,7 @@ import { FaWhatsapp, FaInstagram, FaFacebook, FaMapMarkerAlt, FaPhoneAlt } from 
 
 const Contactme = () => {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white px-6 py-16">
+    <section className=" mt-8 relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white px-6 py-16">
       {/* خلفية فخمة شفافة */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -49,7 +49,7 @@ const Contactme = () => {
             <FaWhatsapp />
           </a>
           <a
-            href="https://www.instagram.com/"
+            href="https://www.instagram.com/modygamal33/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-pink-500 transition-all duration-300"
@@ -57,7 +57,7 @@ const Contactme = () => {
             <FaInstagram />
           </a>
           <a
-            href="https://www.facebook.com/"
+            href="https://www.facebook.com/mohamed.gamall.755937"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-blue-500 transition-all duration-300"

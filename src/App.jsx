@@ -14,8 +14,9 @@ import Contactme from './Components/Contactme'
 
 const Layout = () => {
   return (
-    <div className='bg-[url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80)] bg-cover bg-center  '>
-      <div className=' backdrop-blur-md bg-black/60 border border-gray-700 rounded-3xl  shadow-2xl '>
+    <div className='bg-gradient-to-b from-black via-gray-800 to-gray-900'>
+
+      <div className='   '>
         <Navbar />
         <Outlet />
         <Footer />
@@ -33,8 +34,9 @@ const App = () => {
         <Route path='/MirrorReception' element={<ReceptionMirorrCard />}></Route>
         <Route path='/ShowersCard' element={<ShowersCard />}></Route>
         <Route path='/MirrorCard' element={<MirrorCard />}> </Route>
+        <Route path='/Contactme' element={<Contactme />} />
+
       </Route>
-      <Route path='/Contactme' element={<Contactme />} />
 
     </Route>
 
