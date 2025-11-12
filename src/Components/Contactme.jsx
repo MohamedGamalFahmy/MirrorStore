@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { FaWhatsapp, FaInstagram, FaFacebook, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { FaWhatsapp, FaInstagram, FaFacebook, FaMapMarkerAlt, FaPhoneAlt  } from "react-icons/fa";
 
 const Contactme = () => {
   return (
-    <section className=" mt-8 relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white px-6 py-16">
+    <section className=" container mx-auto mt-8 relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white px-6 py-16">
       {/* خلفية فخمة شفافة */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -40,6 +40,7 @@ const Contactme = () => {
 
         {/* أيقونات التواصل */}
         <div className="flex justify-center gap-8 text-3xl">
+       
           <a
             href="https://wa.me/201067341683"
             target="_blank"

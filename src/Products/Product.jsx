@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom';
 
 const Products = () => {
   return (
-    <div className='py-8' >
+    <div className='py-8 ' >
       <div className=' text-white font-extrabold'>
         <motion.h1
           initial={{ opacity: 0, y: 50 }}

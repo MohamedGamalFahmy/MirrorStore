@@ -10,13 +10,15 @@ import ShowersCard from './Products/ShowersCard '
 import About from './Components/About'
 import MirrorCard from './Products/MirrorCard'
 import Contactme from './Components/Contactme'
+import ScrollToTop from './Components/ScrollToTop'
 
 
 const Layout = () => {
   return (
-    <div className='bg-gradient-to-b from-black via-gray-800 to-gray-900'>
+    <div className='bg-black/70'>
 
       <div className='   '>
+        <ScrollToTop />
         <Navbar />
         <Outlet />
         <Footer />

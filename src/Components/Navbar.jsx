@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-  const navLinks = [
+    const navLinks = [
     { id: 1, name: "Home", path: "/" },
     { id: 2, name: "MirrorReception", path: "/MirrorReception" },
     { id: 3, name: "ShowersCard", path: "/ShowersCard" },
