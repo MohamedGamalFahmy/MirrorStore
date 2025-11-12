@@ -22,7 +22,7 @@ const Footer = () => {
             <h2 className="text-3xl font-extrabold text-silver tracking-wider mb-3">
               GF <span className="text-gray-400">for Glass</span>
             </h2>
-            <p className="px-2 text-xl text-gray-300/70 max-w-md mx-auto mb-5 leading-relaxed">
+            <p className="px-2 text-xl text-gray-300/70 max-w-md mx-auto md:mb-5 leading-relaxed">
               مرايات وكبائن بتصميم عصري وجودة فاخرة تعكس ذوقك الرفيع ✨
                متاح تنفيذ جميع المقاسات والإضاءات .
                عليك اختيار الديزين  والمقاس وعلينا التنفيذ في اسرع وقت 
