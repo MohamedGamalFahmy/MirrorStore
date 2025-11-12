@@ -13,21 +13,26 @@ const Footer = () => {
     { id: 4, name: "Contact", path: "/Contactme" },
 
   ];
+  const Namberphone = [
+    { id: 1, num: "01067341683" ,img:<FaPhoneAlt/> },
+    { id: 2, num: "01224885277",img:<FaPhoneAlt/> },
+    { id: 3, num: "01550732863" ,img:<FaPhoneAlt/>},
+  ];
   return (
     <div className='flex-col container shadow-orange-400 shadow-xl mx-auto bg-black  xs:grid xs:grid-cols-1 sm:grid sm:grid-cols-1  md:grid-cols-1  '>
       <div className='con'></div>
       <div className=' flex'>
-        <div className='   xs:grid xs:grid-cols-1 sm:grid sm:grid-cols-1 md:grid-cols-3 gap-4 pb-3  '>
+        <div className='   xs:grid xs:grid-cols-1 sm:grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-3  '>
           <div className=" backdrop-blur-md  text-gray-200 text-center py-10  overflow-hidden">
             <h2 className="text-3xl font-extrabold text-silver tracking-wider mb-3">
               GF <span className="text-gray-400">for Glass</span>
             </h2>
             <p className="px-2 text-xl text-gray-300/70 max-w-md mx-auto md:mb-5 leading-relaxed">
               مرايات وكبائن بتصميم عصري وجودة فاخرة تعكس ذوقك الرفيع ✨
-               متاح تنفيذ جميع المقاسات والإضاءات .
-               عليك اختيار الديزين  والمقاس وعلينا التنفيذ في اسرع وقت 
+              متاح تنفيذ جميع المقاسات والإضاءات .
+              عليك اختيار الديزين  والمقاس وعلينا التنفيذ في اسرع وقت
             </p>
-          
+
           </div>
           {/* روابط التواصل */}
 
@@ -61,8 +66,12 @@ const Footer = () => {
                 <FaFacebook />
               </a>
             </div>
-            <div className='flex gap-2 justify-center items-center text-lg'>
-              <FaPhoneAlt /> <samp className=''> 01067341683-01224885277-01550732863</samp>
+            <div className=' flex justify-center items-center ml-4 xs:grid xs:grid-cols-1 md:grid md:grid-cols-1 lg:grid-cols-3  '>
+              {Namberphone.map((item) =>
+
+                <samp id={item.id} className='flex gap-2 items-center mx-auto text-2xl text-white lg:text-sm lg:gap-1'>{item.img} - <samp>{item.num  } </samp> </samp>
+
+              )}
 
             </div>
           </div>
@@ -82,14 +91,14 @@ const Footer = () => {
         </div>
       </div>
 
-          {/* توقيع */}
-        <div className="  border border-white/20 text-xl  py-3 text-silver  "style={{ letterSpacing: "2px" }}>
+      {/* توقيع */}
+      <div className="  border border-white/20 text-xl  py-3 text-silver  " style={{ letterSpacing: "2px" }}>
         <p className=' text-center'>
           © {new Date().getFullYear()} GF for Glass — Designed & Developed by
           <span className="text-orange-500 font-semibold"> Mohamed Gamal</span>
-          </p>
-        </div>
+        </p>
       </div>
+    </div>
 
   )
 }
