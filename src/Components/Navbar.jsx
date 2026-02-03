@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { logogf } from "../assets";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-    const navLinks = [
+  const navLinks = [
     { id: 1, name: "Home", path: "/" },
     { id: 2, name: "MirrorReception", path: "/MirrorReception" },
     { id: 3, name: "ShowersCard", path: "/ShowersCard" },
     { id: 5, name: "MirrorBathRoom", path: "/MirrorCard" },
     { id: 4, name: "Contact", path: "/Contactme" },
-
   ];
 
   return (
@@ -22,13 +22,15 @@ const Navbar = () => {
       className="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur-md shadow-lg border-b border-gray-800"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 text-white">
-        <motion.h1
-          className="text-2xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500 cursor-pointer"
-          whileHover={{ scale: 1.05 }}
-        >
-          GF for Glass
-        </motion.h1>
-
+        <div>
+          {logogf}
+          <motion.h1
+            className="text-2xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500 cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+          >
+            GF for Glass
+          </motion.h1>
+        </div>
         {/* Desktop Links */}
         <ul className="hidden md:flex space-x-8">
           {navLinks.map((link) => (
@@ -48,8 +50,15 @@ const Navbar = () => {
         </ul>
 
         {/* Mobile Menu Icon */}
-        <div className="md:hidden cursor-pointer" onClick={() => setOpen(!open)}>
-          {open ? <X size={28} className="text-gray-300" /> : <Menu size={28} className="text-gray-300" />}
+        <div
+          className="md:hidden cursor-pointer"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? (
+            <X size={28} className="text-gray-300" />
+          ) : (
+            <Menu size={28} className="text-gray-300" />
+          )}
         </div>
       </div>
 
