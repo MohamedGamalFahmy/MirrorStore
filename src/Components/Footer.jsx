@@ -3,7 +3,7 @@ import Contactme from './Contactme'
 import { FaFacebook, FaInstagram, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa'
 import { li } from 'framer-motion/client';
 import { Link } from 'react-router-dom';
-
+import { logogf } from '../assets';
 const Footer = () => {
   const Links = [
     { id: 1, name: "Home", path: "/" },
@@ -24,8 +24,9 @@ const Footer = () => {
       <div className=' flex'>
         <div className='   xs:grid xs:grid-cols-1 sm:grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pb-3  '>
           <div className=" backdrop-blur-md  text-gray-200 text-center py-10  overflow-hidden">
-            <h2 className="text-3xl font-extrabold text-silver tracking-wider mb-3">
-              GF <span className="text-gray-400">for Glass</span>
+            <img src={logogf} alt="" className='w-50 h-20 mx-auto'/>
+            <h2 className="text-2xl font-extrabold text-silver tracking-wider mb-3">
+              GF <span className="text-gray-400">for Glass & Mirorrs</span>
             </h2>
             <p className="px-2 text-xl text-gray-300/70 max-w-md mx-auto md:mb-5 leading-relaxed">
               مرايات وكبائن بتصميم عصري وجودة فاخرة تعكس ذوقك الرفيع ✨

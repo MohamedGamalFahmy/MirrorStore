@@ -6,7 +6,7 @@ const ReceptionMirorrCard = () => {
   const phoneNumber = "201550732863";
 
   return (
-    <div className='container mx-auto  mt-20 '>
+    <div className='container mx-auto  mt-20 pt-10 '>
       <div className=' xs:container xs:grid grid-cols-1 xs:mx-auto md:grid  md:grid-cols-3 lg:grid lg:grid-cols-4 gap-5 pb-5  '>
 
 

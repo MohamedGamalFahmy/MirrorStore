@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { logogf } from "../assets";
+import { logogf ,bgcard} from "../assets";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
@@ -19,16 +19,16 @@ const Navbar = () => {
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur-md shadow-lg border-b border-gray-800"
+      className="fixed top-0 left-0 w-full mb-10 z-50 bg-black/90 backdrop-blur-md shadow-lg border-b border-gray-800"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4 text-white">
-        <div>
-          {logogf}
+        <div className="flex justify-center items-center">
+          <img src={logogf} alt="" className="w-30 h-20" />
           <motion.h1
-            className="text-2xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500 cursor-pointer"
+            className="text-3xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-gray-300 to-gray-500 cursor-pointer"
             whileHover={{ scale: 1.05 }}
           >
-            GF for Glass
+           Gamal Fahmy
           </motion.h1>
         </div>
         {/* Desktop Links */}

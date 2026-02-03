@@ -63,10 +63,11 @@ import s2 from './s2.jpg';
 import s3 from './s3.jpg';
 import s4 from './s4.jpg';
 import s5 from './s7.jpeg';
+import logogf2 from './LogoGF.png'
 
 export {
 
-  logogf, mr2,
+ logogf2,logogf, mr2,
   mr1, b1, b2, b10, b11, b12, b13, b14, b15, b16, b18, b19, b20, b21,
   b22, b23, b24, b25, b26, b27, b28,
   b29, b3, b30, b31, b32, b34, b35, b4, b5, b6, b7, b8, b9, b17, b36,
