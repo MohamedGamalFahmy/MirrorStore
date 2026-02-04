@@ -77,7 +77,7 @@ const Footer = () => {
             </div>
           </div>
           {/* روابط الصفحات */}
-          <div className='flex flex-col'>
+          <div className=' flex flex-col justify-center items-center'>
             <ul className='flex flex-col justify-center items-center pt-5 text-xl space-y-1'>
               {Links.map((item) =>
                 <Link
@@ -94,7 +94,7 @@ const Footer = () => {
 
       {/* توقيع */}
       <div className="  border border-white/20 text-xl  py-3 text-silver  " style={{ letterSpacing: "2px" }}>
-        <p className=' text-center'>
+        <p className=' text-center text-gray-200 '>
           © {new Date().getFullYear()} GF for Glass — Designed & Developed by
           <span className="text-orange-500 font-semibold"> Mohamed Gamal</span>
         </p>

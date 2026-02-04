@@ -63,11 +63,11 @@ import s2 from './s2.jpg';
 import s3 from './s3.jpg';
 import s4 from './s4.jpg';
 import s5 from './s7.jpeg';
-import logogf2 from './LogoGF.png'
+import panner from './panner.png'
 
 export {
 
- logogf2,logogf, mr2,
+ panner,logogf, mr2,
   mr1, b1, b2, b10, b11, b12, b13, b14, b15, b16, b18, b19, b20, b21,
   b22, b23, b24, b25, b26, b27, b28,
   b29, b3, b30, b31, b32, b34, b35, b4, b5, b6, b7, b8, b9, b17, b36,
@@ -133,6 +133,5 @@ export const showers = [
   { id: 1, name: 'sh1', imge: s1 },
   { id: 2, name: 'sh2', imge: s2 },
   { id: 3, name: 'sh3', imge: s3 },
-  { id: 4, name: 'sh4', imge: s4 },
-  { id: 5, name: 'sh5', imge: s5 }
+  { id: 4, name: 'sh4', imge: s4 }
 ];

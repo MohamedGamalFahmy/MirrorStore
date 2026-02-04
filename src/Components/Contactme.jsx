@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FaWhatsapp, FaInstagram, FaFacebook, FaMapMarkerAlt, FaPhoneAlt  } from "react-icons/fa";
-
+import { panner } from "../assets";
 const Contactme = () => {
   return (
     <section className=" container mx-auto mt-8 pt-16 relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white px-6 py-16">
@@ -8,7 +8,9 @@ const Contactme = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.25 }}
-        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center"
+        className="absolute inset-0 min-h-screen  bg-cover bg-center"
+        style={{backgroundImage:`url(${panner})`}}
+        
       />
 
       <motion.div

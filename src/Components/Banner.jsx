@@ -1,25 +1,24 @@
 import React from 'react'
-import { b24, b32, b17, s1, s2, s3, r1, r2, r14 } from '../assets';
-import { useRef, useState } from 'react';
+import { panner } from '../assets';
 import { motion } from "framer-motion";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import '../App.css';
-import './Banner.css';
-// import required modules
-import { EffectCoverflow, Autoplay } from 'swiper/modules';
+// // Import Swiper styles
+// import 'swiper/css';
+// import 'swiper/css/effect-coverflow';
+// import 'swiper/css/pagination';
+// import '../App.css';
+// import './Banner.css';
+// // import required modules
+// import { EffectCoverflow, Autoplay } from 'swiper/modules';
 
 const Banner = () => {
   return (
-    <section className="container mx-auto relative w-full h-screen overflow-hidden mt-10">
-
-
-      <Swiper
+    <section className="relative w-full h-screen overflow-hidden mt-20">
+      <img src={panner} alt=""  className=' max-h-screen absolute top-0 left-0 w-full h-full object-cover brightness-90 '/>
+    
+      {/* <Swiper
         autoplay={{
           delay: 1500,
           disableOnInteraction: false,
@@ -53,7 +52,7 @@ const Banner = () => {
         <SwiperSlide> <img src={r14} /> </SwiperSlide>
    
 
-      </Swiper>
+      </Swiper> */}
       {/* Overlay */}
       <div className="bg-black/15"></div>
       <motion.div
