@@ -11,6 +11,7 @@ export default {
       'xs':'300px',
       'sm':'450px',
       'md': '640px',
+      'mdl':'800',
       // => @media (min-width: 640px) { ... }
 
       'lg': '1024px',

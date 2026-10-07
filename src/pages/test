@@ -1,0 +1,49 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const Clients = () => {
+  // State لتخزين كود العميل
+  const [clientCode, setClientCode] = useState("");
+    // للتنقل في صفحه جديده باسم جديد 
+  const navigate = useNavigate();
+
+  
+  // الدالة اللي هتشتغل عند الضغط على الزر
+  const handleSubmit = () => {
+      if(clientCode.trim() === "")
+    {alert("من فضلك اكتب كود الخاص بك صحيح ")
+      return;
+    } 
+      navigate(`/clients/${clientCode}`);
+  };
+
+
+  return (
+    <div className="pt-16 flex flex-col items-center mt-20 py-10">
+      <h1 className="text-4xl font-bold text-white mb-3">
+        بوابة العملاء
+      </h1>
+
+      <p className="text-gray-300 mb-6">
+        أدخل كود العميل لمتابعة الفواتير وحالة التنفيذ
+      </p>
+
+      <input
+        type="text"
+        placeholder="أدخل كود العميل"
+        value={clientCode}
+        onChange={(e) => setClientCode(e.target.value)}
+        className="w-80 p-3 rounded-lg border border-gray-500 outline-none"
+      />
+
+      <button
+        onClick={handleSubmit}
+        className="mt-5 bg-yellow-500 text-black px-6 py-3 rounded-lg hover:bg-yellow-400 duration-300"
+      >
+        عرض بياناتي
+      </button>
+    </div>
+  );
+};
+
+export default Clients;
