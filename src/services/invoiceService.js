@@ -5,6 +5,9 @@ import {
   query,
   where,
   orderBy,
+  deleteDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 
 import { db } from "../firebase/config";
@@ -97,6 +100,44 @@ export const getInvoicesByClientCode = async (clientCode) => {
     return invoices;
   } catch (error) {
     console.error("Error getting all invoices:", error);
+    throw error;
+  }
+};
+// تعديل فاتورة موجودة
+export const updateInvoice = async (invoiceId, invoiceData) => {
+  try {
+    if (!invoiceId) {
+      throw new Error("رقم سجل الفاتورة غير موجود");
+    }
+
+    const invoiceRef = doc(db, "invoices", invoiceId);
+
+    await updateDoc(invoiceRef, {
+      ...invoiceData,
+      updatedAt: new Date(),
+    });
+
+    return invoiceId;
+  } catch (error) {
+    console.error("Error updating invoice:", error);
+    throw error;
+  }
+};
+
+// حذف فاتورة
+export const deleteInvoice = async (invoiceId) => {
+  try {
+    if (!invoiceId) {
+      throw new Error("رقم سجل الفاتورة غير موجود");
+    }
+
+    const invoiceRef = doc(db, "invoices", invoiceId);
+
+    await deleteDoc(invoiceRef);
+
+    return invoiceId;
+  } catch (error) {
+    console.error("Error deleting invoice:", error);
     throw error;
   }
 };

@@ -1,12 +1,14 @@
-
 import { useEffect, useMemo, useState } from "react";
-import { Search, Eye, RefreshCw, X } from "lucide-react";
-import { getAllInvoices } from "../../services/invoiceService";
+import { Search, Eye, RefreshCw, X, Pencil, Trash2 } from "lucide-react";
 
+import { getAllInvoices, deleteInvoice } from "../../services/invoiceService";
+
+import InvoiceModal from "../../components/admin/invoices/InvoiceModal";
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [editingInvoice, setEditingInvoice] = useState(null);
 
   const [search, setSearch] = useState("");
   const [fromDate, setFromDate] = useState("");
@@ -28,17 +30,42 @@ const Invoices = () => {
       setLoading(false);
     }
   };
+  /*حذف الفاتورة*/
+  const handleDeleteInvoice = async (invoice) => {
+    if (!invoice?.id) {
+      alert("تعذر تحديد الفاتورة المطلوب حذفها");
+      return;
+    }
 
+    const confirmed = window.confirm(
+      `هل أنت متأكد من حذف الفاتورة رقم ${invoice.invoiceNumber}؟\nلا يمكن التراجع عن هذا الحذف.`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteInvoice(invoice.id);
+
+      if (selectedInvoice?.id === invoice.id) {
+        setSelectedInvoice(null);
+      }
+
+      await loadInvoices();
+
+      alert("تم حذف الفاتورة بنجاح");
+    } catch (error) {
+      console.error("Error deleting invoice:", error);
+      alert("حدث خطأ أثناء حذف الفاتورة");
+    }
+  };
   useEffect(() => {
     loadInvoices();
   }, []);
 
   const formatMoney = (value) => {
     const number = Number(value || 0);
-
-    return `${number.toLocaleString("en-US")} ج.م`;
+    return `${Math.round(number).toLocaleString("en-US")} ج.م`;
   };
-
   const getInvoiceDate = (invoice) => {
     if (!invoice?.createdAt) {
       return null;
@@ -130,17 +157,11 @@ const Invoices = () => {
       const searchValue = search.trim().toLowerCase();
 
       if (searchValue) {
-        const invoiceNumber = String(
-          invoice.invoiceNumber || ""
-        ).toLowerCase();
+        const invoiceNumber = String(invoice.invoiceNumber || "").toLowerCase();
 
-        const clientName = String(
-          invoice.clientName || ""
-        ).toLowerCase();
+        const clientName = String(invoice.clientName || "").toLowerCase();
 
-        const clientCode = String(
-          invoice.clientCode || ""
-        ).toLowerCase();
+        const clientCode = String(invoice.clientCode || "").toLowerCase();
 
         const matchesSearch =
           invoiceNumber.includes(searchValue) ||
@@ -170,10 +191,7 @@ const Invoices = () => {
         }
       }
 
-      if (
-        paymentStatus !== "all" &&
-        invoice.paymentStatus !== paymentStatus
-      ) {
+      if (paymentStatus !== "all" && invoice.paymentStatus !== paymentStatus) {
         return false;
       }
 
@@ -196,14 +214,7 @@ const Invoices = () => {
 
       return true;
     });
-  }, [
-    invoices,
-    search,
-    fromDate,
-    toDate,
-    paymentStatus,
-    executionStatus,
-  ]);
+  }, [invoices, search, fromDate, toDate, paymentStatus, executionStatus]);
 
   const clearFilters = () => {
     setSearch("");
@@ -245,9 +256,7 @@ const Invoices = () => {
         <div className="flex flex-col gap-4 mb-6">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-black">
-                الفواتير
-              </h1>
+              <h1 className="text-2xl font-bold text-black">الفواتير</h1>
 
               <p className="text-sm text-black mt-1">
                 إدارة ومتابعة جميع فواتير العملاء
@@ -260,11 +269,7 @@ const Invoices = () => {
               disabled={loading}
               className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:opacity-50"
             >
-              <RefreshCw
-                size={18}
-                className={loading ? "animate-spin" : ""}
-              />
-
+              <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
               تحديث
             </button>
           </div>
@@ -342,9 +347,7 @@ const Invoices = () => {
 
                 <select
                   value={executionStatus}
-                  onChange={(e) =>
-                    setExecutionStatus(e.target.value)
-                  }
+                  onChange={(e) => setExecutionStatus(e.target.value)}
                   className="w-full border rounded-lg py-2 px-3 text-black bg-white outline-none focus:ring-2 focus:ring-black"
                 >
                   <option value="all">كل الحالات</option>
@@ -373,14 +376,9 @@ const Invoices = () => {
 
         {loading ? (
           <div className="bg-white border rounded-xl p-10 text-center">
-            <RefreshCw
-              size={28}
-              className="animate-spin mx-auto text-black"
-            />
+            <RefreshCw size={28} className="animate-spin mx-auto text-black" />
 
-            <p className="mt-3 text-black">
-              جاري تحميل الفواتير...
-            </p>
+            <p className="mt-3 text-black">جاري تحميل الفواتير...</p>
           </div>
         ) : filteredInvoices.length === 0 ? (
           <div className="bg-white border rounded-xl p-10 text-center">
@@ -413,17 +411,13 @@ const Invoices = () => {
                   </div>
 
                   <div className="text-left">
-                    <p className="text-sm text-black">
-                      {formatDate(invoice)}
-                    </p>
+                    <p className="text-sm text-black">{formatDate(invoice)}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      قبل الخصم
-                    </p>
+                    <p className="text-xs text-black">قبل الخصم</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatMoney(invoice.subtotal)}
@@ -431,9 +425,7 @@ const Invoices = () => {
                   </div>
 
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      الخصم
-                    </p>
+                    <p className="text-xs text-black">الخصم</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatMoney(invoice.discount)}
@@ -441,9 +433,7 @@ const Invoices = () => {
                   </div>
 
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      الإجمالي النهائي
-                    </p>
+                    <p className="text-xs text-black">الإجمالي النهائي</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatMoney(invoice.total)}
@@ -451,9 +441,7 @@ const Invoices = () => {
                   </div>
 
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      المدفوع
-                    </p>
+                    <p className="text-xs text-black">المدفوع</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatMoney(invoice.paid)}
@@ -461,9 +449,7 @@ const Invoices = () => {
                   </div>
 
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      المتبقي
-                    </p>
+                    <p className="text-xs text-black">المتبقي</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatMoney(invoice.remaining)}
@@ -471,47 +457,64 @@ const Invoices = () => {
                   </div>
 
                   <div className="border rounded-lg p-3">
-                    <p className="text-xs text-black">
-                      حالة الدفع
-                    </p>
+                    <p className="text-xs text-black">حالة الدفع</p>
 
                     <span
                       className={`inline-block mt-1 px-2 py-1 rounded-md text-xs font-semibold ${getPaymentStatusClass(
-                        invoice.paymentStatus
+                        invoice.paymentStatus,
                       )}`}
                     >
-                      {getPaymentStatusText(
-                        invoice.paymentStatus
-                      )}
+                      {getPaymentStatusText(invoice.paymentStatus)}
                     </span>
                   </div>
 
                   <div className="border rounded-lg p-3 col-span-2">
-                    <p className="text-xs text-black">
-                      حالة التنفيذ
-                    </p>
+                    <p className="text-xs text-black">حالة التنفيذ</p>
 
                     <span
                       className={`inline-block mt-1 px-2 py-1 rounded-md text-xs font-semibold ${getExecutionStatusClass(
-                        invoice.executionStatus
+                        invoice.executionStatus,
                       )}`}
                     >
-                      {getExecutionStatusText(
-                        invoice.executionStatus
-                      )}
+                      {getExecutionStatusText(invoice.executionStatus)}
                     </span>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setSelectedInvoice(invoice)}
-                  className="w-full mt-4 bg-black text-white rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-gray-800"
-                >
-                  <Eye size={18} />
+                <div className="grid grid-cols-3 gap-2 mt-4">
+                  {/* عرض الفاتورة */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInvoice(invoice)}
+                    className="bg-black text-white rounded-lg py-3 px-2 flex items-center justify-center gap-2 hover:bg-gray-800 text-sm"
+                  >
+                    <Eye size={17} />
+                    عرض
+                  </button>
 
-                  عرض الفاتورة
-                </button>
+                  {/* تعديل الفاتورة */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedInvoice(null);
+                      setEditingInvoice(invoice);
+                    }}
+                    className="bg-blue-600 text-white rounded-lg py-3 px-2 flex items-center justify-center gap-2 hover:bg-blue-700 text-sm"
+                  >
+                    <Pencil size={17} />
+                    تعديل
+                  </button>
+
+                  {/* حذف الفاتورة */}
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteInvoice(invoice)}
+                    className="bg-red-600 text-white rounded-lg py-3 px-2 flex items-center justify-center gap-2 hover:bg-red-700 text-sm"
+                  >
+                    <Trash2 size={17} />
+                    حذف
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -548,9 +551,7 @@ const Invoices = () => {
               <div className="bg-gray-50 border rounded-xl p-4 mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
-                    <p className="text-sm text-black">
-                      اسم العميل
-                    </p>
+                    <p className="text-sm text-black">اسم العميل</p>
 
                     <p className="font-bold text-black mt-1">
                       {selectedInvoice.clientName || "-"}
@@ -558,9 +559,7 @@ const Invoices = () => {
                   </div>
 
                   <div>
-                    <p className="text-sm text-black">
-                      كود العميل
-                    </p>
+                    <p className="text-sm text-black">كود العميل</p>
 
                     <p className="font-bold text-black mt-1">
                       {selectedInvoice.clientCode || "-"}
@@ -568,9 +567,7 @@ const Invoices = () => {
                   </div>
 
                   <div>
-                    <p className="text-sm text-black">
-                      تاريخ الفاتورة
-                    </p>
+                    <p className="text-sm text-black">تاريخ الفاتورة</p>
 
                     <p className="font-bold text-black mt-1">
                       {formatDate(selectedInvoice)}
@@ -581,9 +578,7 @@ const Invoices = () => {
 
               <div className="space-y-4">
                 {selectedInvoice.items?.map((item, itemIndex) => {
-                  const measurements = Array.isArray(
-                    item.measurements
-                  )
+                  const measurements = Array.isArray(item.measurements)
                     ? item.measurements
                     : [];
 
@@ -612,362 +607,294 @@ const Invoices = () => {
                             لا توجد تفاصيل مقاسات لهذا المنتج.
                           </p>
                         ) : (
-                          measurements.map(
-                            (measurement, measurementIndex) => {
-                              const services =
-                                measurement.services || {};
+                          measurements.map((measurement, measurementIndex) => {
+                            const services = measurement.services || {};
 
-                              const accessories =
-                                Array.isArray(
-                                  measurement.accessories
-                                )
-                                  ? measurement.accessories
-                                  : [];
+                            const accessories = Array.isArray(
+                              measurement.accessories,
+                            )
+                              ? measurement.accessories
+                              : [];
 
-                              const calculation =
-                                measurement.calculation || {};
+                            const calculation = measurement.calculation || {};
 
-                              const servicesCalculation =
-                                Array.isArray(
-                                  calculation.servicesCalculation
-                                )
-                                  ? calculation.servicesCalculation
-                                  : [];
+                            const servicesCalculation = Array.isArray(
+                              calculation.servicesCalculation,
+                            )
+                              ? calculation.servicesCalculation
+                              : [];
 
-                              const accessoriesCalculation =
-                                Array.isArray(
-                                  calculation.accessoriesCalculation
-                                )
-                                  ? calculation.accessoriesCalculation
-                                  : [];
+                            const accessoriesCalculation = Array.isArray(
+                              calculation.accessoriesCalculation,
+                            )
+                              ? calculation.accessoriesCalculation
+                              : [];
 
-                              return (
-                                <div
-                                  key={
-                                    measurement.id ||
-                                    measurementIndex
-                                  }
-                                  className="border rounded-xl p-4"
-                                >
-                                  <div className="flex items-center justify-between gap-3 mb-4">
-                                    <h4 className="font-bold text-black">
-                                      المقاس{" "}
-                                      {measurementIndex + 1}
-                                    </h4>
+                            return (
+                              <div
+                                key={measurement.id || measurementIndex}
+                                className="border rounded-xl p-4"
+                              >
+                                <div className="flex items-center justify-between gap-3 mb-4">
+                                  <h4 className="font-bold text-black">
+                                    المقاس {measurementIndex + 1}
+                                  </h4>
 
-                                    <span className="text-sm text-black">
-                                      عدد القطع:{" "}
+                                  <span className="text-sm text-black">
+                                    عدد القطع: {measurement.quantity || 1}
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                                  <div className="bg-gray-50 border rounded-lg p-3">
+                                    <p className="text-xs text-black">الطول</p>
+
+                                    <p className="font-bold text-black mt-1">
+                                      {measurement.length || 0}
+                                    </p>
+                                  </div>
+
+                                  <div className="bg-gray-50 border rounded-lg p-3">
+                                    <p className="text-xs text-black">العرض</p>
+
+                                    <p className="font-bold text-black mt-1">
+                                      {measurement.width || 0}
+                                    </p>
+                                  </div>
+
+                                  <div className="bg-gray-50 border rounded-lg p-3">
+                                    <p className="text-xs text-black">الكمية</p>
+
+                                    <p className="font-bold text-black mt-1">
                                       {measurement.quantity || 1}
+                                    </p>
+                                  </div>
+
+                                  <div className="bg-gray-50 border rounded-lg p-3">
+                                    <p className="text-xs text-black">
+                                      المساحة
+                                    </p>
+
+                                    <p className="font-bold text-black mt-1">
+                                      {calculation.area || 0}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="border rounded-xl p-4 mb-4">
+                                  <h5 className="font-bold text-black mb-3">
+                                    تفاصيل المنتج
+                                  </h5>
+
+                                  <div className="flex items-center justify-between gap-3">
+                                    <span className="text-black">
+                                      سعر الوحدة
+                                    </span>
+
+                                    <span className="font-semibold text-black">
+                                      {formatMoney(
+                                        calculation.productCalculation
+                                          ?.unitPrice ??
+                                          item.product?.defaultPrice ??
+                                          0,
+                                      )}
                                     </span>
                                   </div>
 
-                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                                    <div className="bg-gray-50 border rounded-lg p-3">
-                                      <p className="text-xs text-black">
-                                        الطول
-                                      </p>
+                                  <div className="flex items-center justify-between gap-3 mt-2">
+                                    <span className="text-black">
+                                      إجمالي المنتج
+                                    </span>
 
-                                      <p className="font-bold text-black mt-1">
-                                        {measurement.length || 0}
-                                      </p>
-                                    </div>
-
-                                    <div className="bg-gray-50 border rounded-lg p-3">
-                                      <p className="text-xs text-black">
-                                        العرض
-                                      </p>
-
-                                      <p className="font-bold text-black mt-1">
-                                        {measurement.width || 0}
-                                      </p>
-                                    </div>
-
-                                    <div className="bg-gray-50 border rounded-lg p-3">
-                                      <p className="text-xs text-black">
-                                        الكمية
-                                      </p>
-
-                                      <p className="font-bold text-black mt-1">
-                                        {measurement.quantity ||
-                                          1}
-                                      </p>
-                                    </div>
-
-                                    <div className="bg-gray-50 border rounded-lg p-3">
-                                      <p className="text-xs text-black">
-                                        المساحة
-                                      </p>
-
-                                      <p className="font-bold text-black mt-1">
-                                        {calculation.area || 0}
-                                      </p>
-                                    </div>
+                                    <span className="font-bold text-black">
+                                      {formatMoney(
+                                        calculation.productCalculation?.total ??
+                                          0,
+                                      )}
+                                    </span>
                                   </div>
+                                </div>
 
+                                {servicesCalculation.length > 0 && (
                                   <div className="border rounded-xl p-4 mb-4">
-                                    <h5 className="font-bold text-black mb-3">
-                                      تفاصيل المنتج
+                                    <h5 className="text-sm font-bold text-black mb-3">
+                                      الخدمات
                                     </h5>
 
-                                    <div className="flex items-center justify-between gap-3">
-                                      <span className="text-black">
-                                        سعر الوحدة
-                                      </span>
+                                    <div className="space-y-2">
+                                      {servicesCalculation.map(
+                                        (service, serviceIndex) => (
+                                          <div
+                                            key={`${measurementIndex}-${serviceIndex}`}
+                                            className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border rounded-lg p-3 bg-gray-50"
+                                          >
+                                            <div>
+                                              <p className="font-semibold text-black">
+                                                {service.name ||
+                                                  getServiceName("", service)}
+                                              </p>
 
-                                      <span className="font-semibold text-black">
-                                        {formatMoney(
-                                          calculation
-                                            .productCalculation
-                                            ?.unitPrice ??
-                                            item.product
-                                              ?.defaultPrice ??
-                                            0
-                                        )}
-                                      </span>
+                                              <p className="text-sm text-black mt-1">
+                                                الكمية: {service.quantity ?? 0}{" "}
+                                                {service.unit || ""}
+                                              </p>
+
+                                              <p className="text-sm text-black mt-1">
+                                                سعر الوحدة:{" "}
+                                                {formatMoney(service.unitPrice)}
+                                              </p>
+                                            </div>
+
+                                            <div className="md:text-left">
+                                              <p className="text-xs text-black">
+                                                إجمالي الخدمة
+                                              </p>
+
+                                              <p className="font-bold text-black">
+                                                {formatMoney(service.total)}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        ),
+                                      )}
                                     </div>
 
-                                    <div className="flex items-center justify-between gap-3 mt-2">
-                                      <span className="text-black">
-                                        إجمالي المنتج
+                                    <div className="mt-3 pt-3 border-t flex items-center justify-between">
+                                      <span className="font-bold text-black">
+                                        إجمالي الخدمات
                                       </span>
 
                                       <span className="font-bold text-black">
-                                        {formatMoney(
-                                          calculation
-                                            .productCalculation
-                                            ?.total ?? 0
-                                        )}
+                                        {formatMoney(calculation.servicesTotal)}
                                       </span>
                                     </div>
                                   </div>
+                                )}
 
-                                  {servicesCalculation.length >
-                                    0 && (
-                                    <div className="border rounded-xl p-4 mb-4">
-                                      <h5 className="text-sm font-bold text-black mb-3">
-                                        الخدمات
-                                      </h5>
+                                {accessories.length > 0 ||
+                                accessoriesCalculation.length > 0 ? (
+                                  <div className="border rounded-xl p-4 mb-4">
+                                    <h5 className="text-sm font-bold text-black mb-3">
+                                      الإكسسوارات
+                                    </h5>
 
-                                      <div className="space-y-2">
-                                        {servicesCalculation.map(
-                                          (
-                                            service,
-                                            serviceIndex
-                                          ) => (
-                                            <div
-                                              key={`${measurementIndex}-${serviceIndex}`}
-                                              className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border rounded-lg p-3 bg-gray-50"
-                                            >
-                                              <div>
-                                                <p className="font-semibold text-black">
-                                                  {service.name ||
-                                                    getServiceName(
-                                                      "",
-                                                      service
-                                                    )}
-                                                </p>
+                                    <div className="space-y-2">
+                                      {accessoriesCalculation.length > 0
+                                        ? accessoriesCalculation.map(
+                                            (accessory, accessoryIndex) => (
+                                              <div
+                                                key={accessoryIndex}
+                                                className="flex items-center justify-between gap-3 border rounded-lg p-3 bg-gray-50"
+                                              >
+                                                <div>
+                                                  <p className="font-semibold text-black">
+                                                    {accessory.name ||
+                                                      accessory.productName ||
+                                                      "إكسسوار"}
+                                                  </p>
 
-                                                <p className="text-sm text-black mt-1">
-                                                  الكمية:{" "}
-                                                  {service.quantity ??
-                                                    0}{" "}
-                                                  {service.unit ||
-                                                    ""}
-                                                </p>
+                                                  <p className="text-sm text-black mt-1">
+                                                    الكمية:{" "}
+                                                    {accessory.quantity ?? 1}
+                                                  </p>
 
-                                                <p className="text-sm text-black mt-1">
-                                                  سعر الوحدة:{" "}
-                                                  {formatMoney(
-                                                    service.unitPrice
+                                                  {accessory.unitPrice !==
+                                                    undefined && (
+                                                    <p className="text-sm text-black mt-1">
+                                                      سعر الوحدة:{" "}
+                                                      {formatMoney(
+                                                        accessory.unitPrice,
+                                                      )}
+                                                    </p>
                                                   )}
-                                                </p>
-                                              </div>
-
-                                              <div className="md:text-left">
-                                                <p className="text-xs text-black">
-                                                  إجمالي الخدمة
-                                                </p>
+                                                </div>
 
                                                 <p className="font-bold text-black">
                                                   {formatMoney(
-                                                    service.total
+                                                    accessory.total ?? 0,
                                                   )}
                                                 </p>
                                               </div>
-                                            </div>
+                                            ),
                                           )
-                                        )}
-                                      </div>
+                                        : accessories.map(
+                                            (accessory, accessoryIndex) => (
+                                              <div
+                                                key={accessoryIndex}
+                                                className="flex items-center justify-between gap-3 border rounded-lg p-3 bg-gray-50"
+                                              >
+                                                <div>
+                                                  <p className="font-semibold text-black">
+                                                    {accessory.name ||
+                                                      accessory.productName ||
+                                                      "إكسسوار"}
+                                                  </p>
 
-                                      <div className="mt-3 pt-3 border-t flex items-center justify-between">
-                                        <span className="font-bold text-black">
-                                          إجمالي الخدمات
-                                        </span>
-
-                                        <span className="font-bold text-black">
-                                          {formatMoney(
-                                            calculation.servicesTotal
-                                          )}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  )}
-
-                                  {accessories.length > 0 ||
-                                    accessoriesCalculation.length >
-                                      0 ? (
-                                    <div className="border rounded-xl p-4 mb-4">
-                                      <h5 className="text-sm font-bold text-black mb-3">
-                                        الإكسسوارات
-                                      </h5>
-
-                                      <div className="space-y-2">
-                                        {accessoriesCalculation.length >
-                                        0
-                                          ? accessoriesCalculation.map(
-                                              (
-                                                accessory,
-                                                accessoryIndex
-                                              ) => (
-                                                <div
-                                                  key={
-                                                    accessoryIndex
-                                                  }
-                                                  className="flex items-center justify-between gap-3 border rounded-lg p-3 bg-gray-50"
-                                                >
-                                                  <div>
-                                                    <p className="font-semibold text-black">
-                                                      {accessory.name ||
-                                                        accessory
-                                                          .productName ||
-                                                        "إكسسوار"}
-                                                    </p>
-
-                                                    <p className="text-sm text-black mt-1">
-                                                      الكمية:{" "}
-                                                      {accessory.quantity ??
-                                                        1}
-                                                    </p>
-
-                                                    {accessory.unitPrice !==
-                                                      undefined && (
-                                                      <p className="text-sm text-black mt-1">
-                                                        سعر الوحدة:{" "}
-                                                        {formatMoney(
-                                                          accessory.unitPrice
-                                                        )}
-                                                      </p>
-                                                    )}
-                                                  </div>
-
-                                                  <p className="font-bold text-black">
-                                                    {formatMoney(
-                                                      accessory.total ??
-                                                        0
-                                                    )}
+                                                  <p className="text-sm text-black mt-1">
+                                                    الكمية:{" "}
+                                                    {accessory.quantity ?? 1}
                                                   </p>
                                                 </div>
-                                              )
-                                            )
-                                          : accessories.map(
-                                              (
-                                                accessory,
-                                                accessoryIndex
-                                              ) => (
-                                                <div
-                                                  key={
-                                                    accessoryIndex
-                                                  }
-                                                  className="flex items-center justify-between gap-3 border rounded-lg p-3 bg-gray-50"
-                                                >
-                                                  <div>
-                                                    <p className="font-semibold text-black">
-                                                      {accessory.name ||
-                                                        accessory
-                                                          .productName ||
-                                                        "إكسسوار"}
-                                                    </p>
 
-                                                    <p className="text-sm text-black mt-1">
-                                                      الكمية:{" "}
-                                                      {accessory.quantity ??
-                                                        1}
-                                                    </p>
-                                                  </div>
-
-                                                  <p className="font-bold text-black">
-                                                    {formatMoney(
+                                                <p className="font-bold text-black">
+                                                  {formatMoney(
+                                                    Number(
+                                                      accessory.price || 0,
+                                                    ) *
                                                       Number(
-                                                        accessory.price ||
-                                                          0
-                                                      ) *
-                                                        Number(
-                                                          accessory.quantity ||
-                                                            1
-                                                        )
-                                                    )}
-                                                  </p>
-                                                </div>
-                                              )
-                                            )}
-                                      </div>
-
-                                      <div className="mt-3 pt-3 border-t flex items-center justify-between">
-                                        <span className="font-bold text-black">
-                                          إجمالي الإكسسوارات
-                                        </span>
-
-                                        <span className="font-bold text-black">
-                                          {formatMoney(
-                                            calculation.accessoriesTotal ??
-                                              0
+                                                        accessory.quantity || 1,
+                                                      ),
+                                                  )}
+                                                </p>
+                                              </div>
+                                            ),
                                           )}
-                                        </span>
-                                      </div>
                                     </div>
-                                  ) : null}
 
-                                  <div className="bg-gray-100 rounded-xl p-4">
-                                    <div className="flex items-center justify-between gap-3">
+                                    <div className="mt-3 pt-3 border-t flex items-center justify-between">
                                       <span className="font-bold text-black">
-                                        إجمالي هذا المقاس
+                                        إجمالي الإكسسوارات
                                       </span>
 
-                                      <span className="text-lg font-bold text-black">
+                                      <span className="font-bold text-black">
                                         {formatMoney(
-                                          calculation.total ?? 0
+                                          calculation.accessoriesTotal ?? 0,
                                         )}
                                       </span>
                                     </div>
                                   </div>
+                                ) : null}
 
-                                  {Object.keys(services).length >
-                                    0 &&
-                                    servicesCalculation.length ===
-                                      0 && (
-                                      <div className="hidden">
-                                        {Object.keys(
-                                          services
-                                        ).map(
-                                          (serviceKey) => (
-                                            <span
-                                              key={serviceKey}
-                                            >
-                                              {getServiceName(
-                                                serviceKey,
-                                                services[
-                                                  serviceKey
-                                                ]
-                                              )}
-                                            </span>
-                                          )
-                                        )}
-                                      </div>
-                                    )}
+                                <div className="bg-gray-100 rounded-xl p-4">
+                                  <div className="flex items-center justify-between gap-3">
+                                    <span className="font-bold text-black">
+                                      إجمالي هذا المقاس
+                                    </span>
+
+                                    <span className="text-lg font-bold text-black">
+                                      {formatMoney(calculation.total ?? 0)}
+                                    </span>
+                                  </div>
                                 </div>
-                              );
-                            }
-                          )
+
+                                {Object.keys(services).length > 0 &&
+                                  servicesCalculation.length === 0 && (
+                                    <div className="hidden">
+                                      {Object.keys(services).map(
+                                        (serviceKey) => (
+                                          <span key={serviceKey}>
+                                            {getServiceName(
+                                              serviceKey,
+                                              services[serviceKey],
+                                            )}
+                                          </span>
+                                        ),
+                                      )}
+                                    </div>
+                                  )}
+                              </div>
+                            );
+                          })
                         )}
                       </div>
                     </div>
@@ -982,26 +909,18 @@ const Invoices = () => {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-black">
-                      الإجمالي قبل الخصم
-                    </span>
+                    <span className="text-black">الإجمالي قبل الخصم</span>
 
                     <span className="font-semibold text-black">
-                      {formatMoney(
-                        selectedInvoice.subtotal
-                      )}
+                      {formatMoney(selectedInvoice.subtotal)}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-black">
-                      الخصم
-                    </span>
+                    <span className="text-black">الخصم</span>
 
                     <span className="font-semibold text-black">
-                      {formatMoney(
-                        selectedInvoice.discount
-                      )}
+                      {formatMoney(selectedInvoice.discount)}
                     </span>
                   </div>
 
@@ -1011,45 +930,38 @@ const Invoices = () => {
                     </span>
 
                     <span className="text-xl font-bold text-black">
-                      {formatMoney(selectedInvoice.total)}
+                      {Math.round(
+                        Number(selectedInvoice.total) || 0,
+                      ).toLocaleString("en-US")}
+                      ج.م
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-black">
-                      المدفوع
-                    </span>
+                    <span className="text-black">المدفوع</span>
 
                     <span className="font-semibold text-black">
-                      {formatMoney(selectedInvoice.paid)}
+                      {Math.round(Number(selectedInvoice.paid) || 0).toLocaleString("en-US")} ج.م
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="font-bold text-black">
-                      المتبقي
-                    </span>
+                    <span className="font-bold text-black">المتبقي</span>
 
                     <span className="text-lg font-bold text-black">
-                      {formatMoney(
-                        selectedInvoice.remaining
-                      )}
+                      {Math.round(Number(selectedInvoice.remaining) || 0).toLocaleString("en-US")} ج.م
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3 pt-3 border-t">
-                    <span className="font-semibold text-black">
-                      حالة الدفع
-                    </span>
+                    <span className="font-semibold text-black">حالة الدفع</span>
 
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-semibold ${getPaymentStatusClass(
-                        selectedInvoice.paymentStatus
+                        selectedInvoice.paymentStatus,
                       )}`}
                     >
-                      {getPaymentStatusText(
-                        selectedInvoice.paymentStatus
-                      )}
+                      {getPaymentStatusText(selectedInvoice.paymentStatus)}
                     </span>
                   </div>
 
@@ -1060,12 +972,10 @@ const Invoices = () => {
 
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-semibold ${getExecutionStatusClass(
-                        selectedInvoice.executionStatus
+                        selectedInvoice.executionStatus,
                       )}`}
                     >
-                      {getExecutionStatusText(
-                        selectedInvoice.executionStatus
-                      )}
+                      {getExecutionStatusText(selectedInvoice.executionStatus)}
                     </span>
                   </div>
                 </div>
@@ -1083,6 +993,22 @@ const Invoices = () => {
             </div>
           </div>
         </div>
+      )}
+      {editingInvoice && (
+        <InvoiceModal
+          open={true}
+          onClose={() => setEditingInvoice(null)}
+          client={{
+            id: editingInvoice.clientId || "",
+            clientCode: editingInvoice.clientCode || "",
+            name: editingInvoice.clientName || "",
+          }}
+          initialInvoice={editingInvoice}
+          isEditing={true}
+          onSaved={async () => {
+            await loadInvoices();
+          }}
+        />
       )}
     </div>
   );

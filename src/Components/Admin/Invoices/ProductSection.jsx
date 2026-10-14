@@ -46,7 +46,7 @@ const createProductItem = (product) => ({
   // أطقم السيكوريت المختارة لهذا الصنف
 });
 
-const ProductSection = ({ onChange }) => {
+const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
   const [items, setItems] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -88,7 +88,52 @@ const ProductSection = ({ onChange }) => {
       items: calculatedItems,
       subtotal: calculateInvoiceTotal(),
     });
-  }, [items, onChange]);
+  }, [items, onChange, allProducts]);
+  useEffect(() => {
+    if (!Array.isArray(initialItems)) return;
+
+    const restoredItems = initialItems.map((item, itemIndex) => ({
+      ...item,
+      id: item.id ?? `restored-item-${itemIndex}-${Date.now()}`,
+      measurements: (item.measurements || []).map(
+        (measurement, measurementIndex) => ({
+          ...measurement,
+          id:
+            measurement.id ??
+            `restored-measurement-${itemIndex}-${measurementIndex}-${Date.now()}`,
+          length: measurement.length ?? "",
+          width: measurement.width ?? "",
+          quantity: measurement.quantity ?? 1,
+          services: {
+            chamfer: false,
+            sanding: false,
+            groove: false,
+            led: { enabled: false, quantity: "" },
+            touch: { enabled: false, quantity: 1 },
+            ...(measurement.services || {}),
+            led: {
+              enabled: measurement.services?.led?.enabled ?? false,
+              quantity: measurement.services?.led?.quantity ?? "",
+            },
+            touch: {
+              enabled: measurement.services?.touch?.enabled ?? false,
+              quantity: measurement.services?.touch?.quantity ?? 1,
+            },
+          },
+          accessories: measurement.accessories || [],
+          formedSides: {
+            top: false,
+            right: false,
+            bottom: false,
+            left: false,
+            ...(measurement.formedSides || {}),
+          },
+        }),
+      ),
+    }));
+
+    setItems(restoredItems);
+  }, [initialItems, editKey]);
   // =========================
   // Add Product
   // =========================
@@ -459,7 +504,12 @@ const ProductSection = ({ onChange }) => {
       const servicesTotal = calculateMeasurementServices(measurement).total;
 
       const accessoriesTotal = (measurement.accessories || []).reduce(
-        (sum, accessory) => sum + Number(accessory.price || 0),
+        (sum, accessory) => {
+          const price = Number(accessory.price) || 0;
+          const quantity = Number(accessory.quantity ?? 1);
+
+          return sum + price * quantity;
+        },
         0,
       );
 
