@@ -3,7 +3,7 @@ import { Search, Eye, RefreshCw, X, Pencil, Trash2 } from "lucide-react";
 
 import { getAllInvoices, deleteInvoice } from "../../services/invoiceService";
 
-import InvoiceModal from "../../components/admin/Invoices/InvoiceModal";
+import InvoiceModal from "../../components/Admin/Invoices/InvoiceModal";
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
