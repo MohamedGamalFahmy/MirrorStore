@@ -139,7 +139,6 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
   // =========================
 
   const addProduct = (product) => {
-    console.log("SELECTED PRODUCT:", product);
     if (!product) return;
 
     setItems((prev) => [...prev, createProductItem(product)]);
@@ -449,15 +448,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
     /* تجربه*/
     if (measurement.services.chamfer && services.chamfer) {
-      console.log("CHAMFER DEBUG", {
-        length: measurement.length,
-        width: measurement.width,
-        quantity: measurement.quantity,
-        linearMeters: calculateLinearMeters(measurement),
-        finalLinearMeters: linearMeters,
-        price: services.chamfer.defaultPrice,
-        total: result.chamfer,
-      });
+     
 
       result.chamfer =
         linearMeters * Number(services.chamfer.defaultPrice || 0);
@@ -527,7 +518,6 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
   // =========================
 
   const testInvoiceCalculation = () => {
-    console.log("========== INVOICE CALCULATION ==========");
 
     let invoiceTotal = 0;
 
@@ -535,10 +525,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
       let productTotal = 0;
       let servicesTotal = 0;
 
-      console.log(`PRODUCT ${itemIndex + 1}:`);
-      console.log("Name:", item.product.name);
-      console.log("Product Price:", item.product.defaultPrice);
-
+    
       item.measurements.forEach((measurement, measurementIndex) => {
         const area = calculateArea(measurement);
         const linearMeters =
@@ -568,11 +555,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
           measurementServicesTotal += total;
 
-          console.log("Chamfer:", {
-            meters: linearMeters,
-            price,
-            total,
-          });
+       
         }
 
         // صنفرة
@@ -583,11 +566,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
           measurementServicesTotal += total;
 
-          console.log("Sanding:", {
-            area,
-            price,
-            total,
-          });
+        
         }
 
         // خرازانة
@@ -597,11 +576,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
           measurementServicesTotal += total;
 
-          console.log("Groove:", {
-            meters: linearMeters,
-            price,
-            total,
-          });
+     
         }
 
         // ليد
@@ -614,11 +589,7 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
           measurementServicesTotal += total;
 
-          console.log("LED:", {
-            meters: ledQuantity,
-            price,
-            total,
-          });
+     
         }
 
         // تاتش
@@ -632,42 +603,22 @@ const ProductSection = ({ onChange, initialItems = null, editKey = "" }) => {
 
           measurementServicesTotal += total;
 
-          console.log("Touch:", {
-            quantity: touchQuantity,
-            price,
-            total,
-          });
+          
         }
-        console.log("GROOVE SERVICE:", services.groove);
-        console.log("ALL PRODUCTS:", allProducts);
         servicesTotal += measurementServicesTotal;
 
-        console.log(`Measurement ${measurementIndex + 1}:`);
 
-        console.log({
-          length: Number(measurement.length) || 0,
-          width: Number(measurement.width) || 0,
-          quantity,
-          area,
-          linearMeters,
-          productPrice,
-          servicesTotal: measurementServicesTotal,
-          services: measurement.services,
-          formedSides: measurement.formedSides,
-        });
+   
       });
 
       const itemTotal = productTotal + servicesTotal;
 
       invoiceTotal += itemTotal;
 
-      console.log("Product Total:", productTotal);
-      console.log("Services Total:", servicesTotal);
-      console.log("Item Total:", itemTotal);
+      
     });
 
-    console.log("==========================================");
-    console.log("INVOICE TOTAL:", invoiceTotal);
+   
   };
   const services = {
     chamfer: allProducts.find(
